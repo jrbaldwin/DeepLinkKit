@@ -37,7 +37,15 @@
 - (DPLDeepLink *)deepLinkWithURL:(NSURL *)url {
     
     DPLDeepLink *deepLink       = [[DPLDeepLink alloc] initWithURL:url];
-    NSString *deepLinkString    = [NSString stringWithFormat:@"%@%@", deepLink.URL.host, deepLink.URL.path];
+
+    //Modified to handle incoming URLs without URI schemes
+    NSString *deepLinkString;
+    if(deepLink.URL.host){
+        deepLinkString    = [NSString stringWithFormat:@"%@%@", deepLink.URL.host, deepLink.URL.path];
+    }
+    else {
+        deepLinkString    = [NSString stringWithFormat:@"%@", deepLink.URL.path];
+    }
     
     if (self.scheme.length && ![self.scheme isEqualToString:deepLink.URL.scheme]) {
         return nil;
